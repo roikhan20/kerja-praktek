@@ -315,6 +315,8 @@ h1,h2,h3,h4 {
 .btn-remove-variasi {
     background: var(--red);
     color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
 }
 
 /* BUTTON */
