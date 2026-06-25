@@ -298,16 +298,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         <button type="submit" class="btn-login">Masuk Admin</button>
       </form>
-
-     
-
       <div class="divider">
         <span>Akses Menu</span>
       </div>
 
-       <div class="auth-links">
+       <!-- <div class="auth-links">
         <a href="forgot.php" class="auth-link">Lupa Password</a>
-        </div>
+        </div> -->
     </div>
       
       <div class="auth-links">
