@@ -434,8 +434,53 @@ h1,h2,h3,h4 {
 
 </div>
 
+<div class="form-group">
+    <label class="form-label">Status Alat</label>
+
+    <div style="display:flex; gap:15px; margin-top:10px;">
+        <label style="
+            padding:12px 20px;
+            border:2px solid #16A34A;
+            border-radius:10px;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            gap:8px;
+        ">
+            <input
+                type="radio"
+                name="status"
+                value="Tersedia"
+                <?= ($row['status'] == 'Tersedia') ? 'checked' : ''; ?>
+            >
+            ✅ Tersedia
+        </label>
+
+        <label style="
+            padding:12px 20px;
+            border:2px solid #DC2626;
+            border-radius:10px;
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            gap:8px;
+        ">
+            <input
+                type="radio"
+                name="status"
+                value="Tidak Tersedia"
+                <?= ($row['status'] == 'Tidak Tersedia') ? 'checked' : ''; ?>
+            >
+            ❌ Tidak Tersedia
+        </label>
+    </div>
+</div>
+
 <div class="btn-group">
 <a href="admin.php" class="btn-secondary">Batal</a>
+
+
+
 <button type="submit" name="update" class="btn-primary">Update</button>
 </div>
 

@@ -300,13 +300,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </form>
       <div class="divider">
         <span>Akses Menu</span>
-      </div>
-
-       <!-- <div class="auth-links">
-        <a href="forgot.php" class="auth-link">Lupa Password</a>
-        </div> -->
-    </div>
-      
+        
       <div class="auth-links">
         <a href="register.php" class="auth-link">Daftar Baru</a>
         </div>
