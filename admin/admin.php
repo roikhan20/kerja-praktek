@@ -1,16 +1,19 @@
 <?php
+/**
+ * admin/admin.php — Dashboard Kelola Alat Berat
+ * Perubahan dari versi sebelumnya:
+ *   - Tambah link "Kelola Admin" di navbar (hanya tampil untuk superadmin)
+ *   - Gunakan requireLogin() dari Auth
+ */
 session_start();
 
 include_once __DIR__ . '/../config/koneksi.php';
 include_once __DIR__ . '/../config/auth.php';
 
 $auth = new Auth($conn);
-$user = $auth->getUser();
+$auth->requireLogin(); // Redirect ke login.php jika belum login
 
-if (!$auth->isLoggedIn()) {
-    header("Location: login.php");
-    exit;
-}
+$user = $auth->getUser();
 
 if (isset($_GET['logout'])) {
     $auth->logout();
@@ -184,437 +187,213 @@ $total_tersedia = $res_tersedia['count'];
   <link rel="icon" href="../logo2.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root {
-  --navy: #0B1F3A;
-  --navy-2: #122B52;
-  --blue: #1A56DB;
-  --blue-lt: #3B82F6;
-  --accent: #F59E0B;
-  --accent-d: #D97706;
-  --green: #16A34A;
-  --green-d: #15803D;
-  --red: #DC2626;
-  --red-d: #B91C1C;
-  --yellow: #F59E0B;
-  --yellow-d: #D97706;
-  --text: #1E293B;
-  --muted: #64748B;
-  --surface: #F1F5F9;
-  --white: #FFFFFF;
-  --radius: 12px;
-  --radius-lg: 20px;
-}
+    :root {
+      --navy: #0B1F3A; --navy-2: #122B52; --blue: #1A56DB; --blue-lt: #3B82F6;
+      --accent: #F59E0B; --accent-d: #D97706; --green: #16A34A; --green-d: #15803D;
+      --red: #DC2626; --red-d: #B91C1C; --yellow: #F59E0B; --yellow-d: #D97706;
+      --text: #1E293B; --muted: #64748B; --surface: #F1F5F9; --white: #FFFFFF;
+      --radius: 12px; --radius-lg: 20px;
+    }
 
-html {
-  scroll-behavior: smooth;
-}
+    html { scroll-behavior: smooth; }
 
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: #F8FAFF;
-  color: var(--text);
-  line-height: 1.6;
-}
+    body { font-family: 'DM Sans', sans-serif; background: #F8FAFF; color: var(--text); line-height: 1.6; }
 
-h1, h2, h3, h4 {
-  font-family: 'Sora', sans-serif;
-  line-height: 1.2;
-}
+    h1, h2, h3, h4 { font-family: 'Sora', sans-serif; line-height: 1.2; }
 
-.nav {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: rgba(11,31,58,0.97);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-}
+    /* ---- NAVBAR ---- */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(11,31,58,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
 
-.nav-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 1.5rem;
-  height: 68px;
-}
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 1.5rem; height: 68px;
+    }
 
-.nav-left {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
+    .nav-left { display: flex; align-items: center; gap: 2rem; }
 
-.nav-brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-  color: white;
-  font-weight: 700;
-}
+    .nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; font-weight: 700; }
 
-.nav-brand-text {
-  display: flex;
-  flex-direction: column;
-}
+    .nav-brand-text { display: flex; flex-direction: column; }
+    .nav-brand-text span:first-child { font-size: 15px; }
+    .nav-brand-text span:last-child  { font-size: 11px; opacity: 0.8; }
 
-.nav-brand-text span:first-child {
-  font-size: 15px;
-}
+    /* Link menu Kelola Admin */
+    .nav-menu-link {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.06);
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-.nav-brand-text span:last-child {
-  font-size: 11px;
-  opacity: 0.8;
-}
+    .nav-menu-link:hover {
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.4);
+      color: white;
+    }
 
-.nav-right {
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-}
+    /* Badge role */
+    .role-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-left: 6px;
+    }
 
-.nav-stats {
-  display: flex;
-  gap: 1.5rem;
-}
+    .role-badge.superadmin { background: #F59E0B; color: #78350F; }
+    .role-badge.admin       { background: #3B82F6; color: #1E3A8A; }
 
-.stats-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: rgba(255,255,255,0.8);
-  font-size: 12px;
-}
+    .nav-right { display: flex; gap: 1.5rem; align-items: center; }
 
-.stats-number {
-  font-size: 16px;
-  font-weight: 700;
-  color: white;
-}
+    .nav-stats { display: flex; gap: 1.5rem; align-items: center; }
 
-.main-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
-}
+    .stats-item { display: flex; flex-direction: column; align-items: center; }
+    .stats-number { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 800; color: white; }
+    .stats-item span:last-child { font-size: 10px; color: rgba(255,255,255,0.6); text-transform: uppercase; }
 
-.form-card {
-  background: var(--white);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-  overflow: hidden;
-  margin-bottom: 2rem;
-}
+    /* ---- MAIN CONTENT ---- */
+    .main-content { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
 
-.form-header {
-  background: linear-gradient(135deg, var(--navy), var(--navy-2));
-  color: white;
-  padding: 1.5rem 2rem;
-}
+    .form-card, .table-card {
+      background: white; border-radius: var(--radius-lg);
+      box-shadow: 0 4px 24px rgba(11,31,58,0.07);
+      margin-bottom: 2rem; overflow: hidden;
+    }
 
-.form-body {
-  padding: 2rem;
-}
+    .form-header, .table-header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+      color: white; padding: 1.5rem 2rem;
+    }
 
-.form-group {
-  margin-bottom: 1.5rem;
-}
+    .form-body { padding: 2rem; }
 
-.form-label {
-  display: block;
-  font-weight: 600;
-  color: var(--navy);
-  margin-bottom: 0.5rem;
-  font-size: 14px;
-}
+    .form-group { margin-bottom: 1.5rem; }
 
-.form-input,
-.form-textarea,
-.form-select {
-  width: 100%;
-  padding: 12px 16px;
-  border: 2px solid #E2E8F0;
-  border-radius: var(--radius);
-  font-size: 15px;
-  transition: border-color .2s, box-shadow .2s;
-  background: var(--white);
-  font-family: 'DM Sans', sans-serif;
-}
+    .form-label { display: block; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
 
-.form-input:focus,
-.form-textarea:focus,
-.form-select:focus {
-  outline: none;
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(26,86,219,0.1);
-}
+    .form-input, .form-select, .form-textarea {
+      width: 100%; padding: 13px 16px;
+      border: 2px solid #E2E8F0; border-radius: var(--radius);
+      font-size: 14px; font-weight: 500;
+      transition: all 0.25s ease;
+      background: #F8FAFF; color: var(--text);
+      font-family: inherit;
+    }
 
-.variasi-group {
-  background: #F8FAFC;
-  border: 2px solid #E2E8F0;
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-}
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none; border-color: var(--blue);
+      background: var(--white); box-shadow: 0 0 0 4px rgba(26,86,219,0.12);
+    }
 
-.variasi-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr auto;
-  gap: 1rem;
-  align-items: end;
-  margin-bottom: 0.75rem;
-}
+    .form-textarea { resize: vertical; min-height: 80px; }
 
-.variasi-row:last-child {
-  margin-bottom: 0;
-}
+    .variasi-group { display: flex; flex-direction: column; gap: 0.75rem; }
 
-.btn-add-variasi {
-  background: var(--blue);
-  color: white;
-  border: none;
-  padding: 12px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background .2s;
-}
+    .variasi-row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 0.75rem; align-items: start; }
 
-.btn-add-variasi:hover {
-  background: #1D4ED8;
-}
+    .btn-add-variasi {
+      padding: 13px 16px; background: var(--green); color: white;
+      border: none; border-radius: var(--radius); cursor: pointer;
+      font-size: 16px; transition: all 0.2s;
+    }
 
-.btn-primary {
-  background: linear-gradient(135deg, var(--blue), var(--blue-lt));
-  color: white;
-  border: none;
-  padding: 14px 32px;
-  border-radius: var(--radius);
-  font-weight: 700;
-  font-size: 15px;
-  cursor: pointer;
-  transition: all .2s;
-  box-shadow: 0 6px 20px rgba(26,86,219,0.3);
-}
+    .btn-add-variasi:hover { background: var(--green-d); }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(26,86,219,0.4);
-}
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue) 0%, #2563EB 100%);
+      color: white; border: none; padding: 14px 28px;
+      border-radius: var(--radius); font-weight: 700; font-size: 15px;
+      cursor: pointer; transition: all 0.3s;
+      box-shadow: 0 6px 20px rgba(26,86,219,0.25);
+    }
 
-.table-card {
-  background: var(--white);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-  overflow: hidden;
-  margin-bottom: 2rem;
-}
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(26,86,219,0.35); }
 
-.table-header {
-  background: linear-gradient(135deg, var(--navy), var(--navy-2));
-  color: white;
-  padding: 1.5rem 2rem;
-}
+    .table-header { padding: 1.5rem 2rem; }
 
-.alat-list {
-  padding: 1.5rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 1.5rem;
-}
+    .alat-list {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem; padding: 2rem;
+    }
 
-.alat-card {
-  background: #fff;
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-}
+    .alat-card {
+      background: white; border-radius: var(--radius-lg);
+      box-shadow: 0 2px 12px rgba(11,31,58,0.08);
+      overflow: hidden; display: flex; flex-direction: column;
+      border: 1px solid #F1F5F9;
+      transition: all 0.25s;
+    }
 
-.alat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0,0,0,0.1);
-  border-color: var(--blue-lt);
-}
+    .alat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(11,31,58,0.13); }
 
-.alat-card-image {
-  position: relative;
-  height: 180px;
-  background: #F1F5F9;
-  overflow: hidden;
-}
+    .alat-card-image { position: relative; height: 180px; background: #F1F5F9; overflow: hidden; }
 
-.alat-card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+    .alat-card-image img { width: 100%; height: 100%; object-fit: cover; }
 
-.alat-card-image .no-image {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem;
-  color: #CBD5E1;
-}
+    .no-image { display: flex; align-items: center; justify-content: center; height: 100%; font-size: 48px; }
 
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
+    .status-badge {
+      position: absolute; top: 0.75rem; right: 0.75rem;
+      padding: 4px 12px; border-radius: 999px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+    }
 
-.alat-card-image .status-badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-}
+    .status-tersedia { background: #D1FAE5; color: #065F46; }
+    .status-tidak    { background: #FEE2E2; color: #991B1B; }
 
-.status-tersedia {
-  background: #DCFCE7;
-  color: #16A34A;
-}
+    .alat-card-content { padding: 1.25rem; display: flex; flex-direction: column; flex: 1; }
 
-.status-tidak {
-  background: #FEF2F2;
-  color: #DC2626;
-}
+    .alat-title { font-size: 17px; font-weight: 700; margin-bottom: 0.5rem; }
 
-.alat-card-content {
-  padding: 1.25rem;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
+    .alat-lokasi { font-size: 13px; color: var(--muted); margin-bottom: 1rem; display: flex; align-items: center; gap: 4px; }
 
-.alat-title {
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--navy);
-  margin-bottom: 0.5rem;
-  line-height: 1.3;
-}
+    .alat-prices { background: #F8FAFC; border-radius: 10px; padding: 0.75rem 1rem; margin-bottom: 1rem; }
 
-.alat-lokasi {
-  font-size: 13px;
-  color: var(--muted);
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
+    .price-header { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 0.5rem; }
 
-.alat-prices {
-  background: #F8FAFC;
-  border-radius: 10px;
-  padding: 0.75rem 1rem;
-  margin-bottom: 1rem;
-}
+    .price-item { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 14px; }
+    .price-berat { color: var(--text); font-weight: 500; }
+    .price-angka { font-weight: 700; color: var(--blue); }
 
-.price-header {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  display: block;
-  margin-bottom: 0.5rem;
-}
+    .alat-actions { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
 
-.price-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 4px 0;
-  font-size: 14px;
-}
+    .alat-actions a {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 10px 16px; border-radius: 10px; font-weight: 600;
+      font-size: 13px; text-decoration: none; transition: all 0.2s;
+    }
 
-.price-berat {
-  color: var(--text);
-  font-weight: 500;
-}
+    .btn-edit   { background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; }
+    .btn-edit:hover   { background: #FCD34D; transform: translateY(-1px); }
+    .btn-delete { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
+    .btn-delete:hover { background: #FECACA; transform: translateY(-1px); }
 
-.price-angka {
-  font-weight: 700;
-  color: var(--blue);
-}
+    .empty-state { grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--muted); }
 
-.alat-actions {
-  margin-top: auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
-}
-
-.alat-actions a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 10px 16px;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 13px;
-  text-decoration: none;
-  transition: all 0.2s;
-}
-
-.btn-edit {
-  background: #FEF3C7;
-  color: #92400E;
-  border: 1px solid #FCD34D;
-}
-
-.btn-edit:hover {
-  background: #FCD34D;
-  transform: translateY(-1px);
-}
-
-.btn-delete {
-  background: #FEE2E2;
-  color: #991B1B;
-  border: 1px solid #FECACA;
-}
-
-.btn-delete:hover {
-  background: #FECACA;
-  transform: translateY(-1px);
-}
-
-.empty-state {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 3rem;
-  color: var(--muted);
-}
-
-@media (max-width: 768px) {
-  .nav-right {
-    gap: 1rem;
-  }
-
-  .nav-stats {
-    display: none;
-  }
-}
+    @media (max-width: 768px) {
+      .nav-right { gap: 1rem; }
+      .nav-stats  { display: none; }
+      .nav-menu-link span.label { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -623,11 +402,22 @@ h1, h2, h3, h4 {
   <div class="nav-inner">
     <div class="nav-left">
       <a href="admin.php" class="nav-brand">
-        <div class="nav-brand-text" >
-          <strong><?= htmlspecialchars($user['username']); ?></strong>
+        <div class="nav-brand-text">
+          <strong>
+            <?= htmlspecialchars($user['username']); ?>
+            <span class="role-badge <?= $user['role']; ?>">
+              <?= $user['role'] === 'superadmin' ? 'Superadmin' : 'Admin'; ?>
+            </span>
+          </strong>
           <span>PT Cipta Unggul</span>
         </div>
       </a>
+
+      <?php if ($auth->isSuperadmin()): ?>
+        <a href="kelola-admin.php" class="nav-menu-link">
+          👥 <span class="label">Kelola Admin</span>
+        </a>
+      <?php endif; ?>
     </div>
     
     <div class="nav-right">
@@ -642,7 +432,7 @@ h1, h2, h3, h4 {
         </div>
       </div>
         
-      <a href="?logout=1" 
+      <a href="?logout=1"
          style="color:rgba(255,255,255,0.9);padding:10px 20px;border-radius:8px;border:1px solid rgba(255,255,255,0.3);text-decoration:none;font-weight:600;font-size:13px;backdrop-filter:blur(10px);transition:all .2s;"
          onclick="return confirm('Yakin logout, <?= htmlspecialchars($user['nama']); ?>?')">
          Logout
@@ -690,7 +480,7 @@ h1, h2, h3, h4 {
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
           <div class="form-group">
             <label class="form-label">Deskripsi</label>
-            <textarea name="deskripsi" class="form-textarea" placeholder="Deskripsi singkat alat..." rows="3" ></textarea>
+            <textarea name="deskripsi" class="form-textarea" placeholder="Deskripsi singkat alat..." rows="3"></textarea>
           </div>
           <div class="form-group">
             <label class="form-label">Spesifikasi</label>
@@ -733,7 +523,6 @@ h1, h2, h3, h4 {
         <?php while($row = mysqli_fetch_assoc($data)) : ?>
           <?php
             $alat_id = (int)$row['id'];
-            // Tetap jalankan query aman untuk mengambil data variasi berelasi
             $variasi = mysqli_query($conn, "SELECT * FROM harga_alat WHERE alat_id = $alat_id");
           ?>
           <div class="alat-card">
@@ -743,16 +532,13 @@ h1, h2, h3, h4 {
               <?php else: ?>
                 <div class="no-image">📦</div>
               <?php endif; ?>
-              
               <span class="status-badge status-<?= htmlspecialchars($row['status']); ?>">
                 <?= $row['status'] == 'tersedia' ? 'Tersedia' : 'Tidak'; ?>
               </span>
             </div>
-            
             <div class="alat-card-content">
               <h3 class="alat-title"><?= htmlspecialchars($row['nama']); ?></h3>
               <p class="alat-lokasi"><?= htmlspecialchars($row['lokasi']); ?></p>
-              
               <div class="alat-prices">
                 <span class="price-header">Harga:</span>
                 <?php while($v = mysqli_fetch_assoc($variasi)) : ?>
@@ -762,12 +548,11 @@ h1, h2, h3, h4 {
                   </div>
                 <?php endwhile; ?>
               </div>
-              
               <div class="alat-actions">
-                <a href="edit.php?id=<?= $row['id']; ?>" class="btn-edit">Edit</a>
-                <a href="?hapus=<?= $row['id']; ?>" 
-                   onclick="return confirm('Yakin hapus alat ini?')" 
-                   class="btn-delete">Hapus</a>
+                <a href="edit.php?id=<?= $row['id']; ?>" class="btn-edit">✏️ Edit</a>
+                <a href="?hapus=<?= $row['id']; ?>"
+                   onclick="return confirm('Yakin hapus alat ini?')"
+                   class="btn-delete">🗑️ Hapus</a>
               </div>
             </div>
           </div>
