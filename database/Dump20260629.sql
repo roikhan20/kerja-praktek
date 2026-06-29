@@ -28,6 +28,7 @@ CREATE TABLE `admin_users` (
   `username` varchar(50) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `no_telp` varchar(20) DEFAULT NULL,
+  `role` enum('superadmin','admin') NOT NULL DEFAULT 'admin',
   `password` varchar(255) DEFAULT NULL,
   `status` enum('active','inactive') DEFAULT 'active',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -35,7 +36,7 @@ CREATE TABLE `admin_users` (
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `no_telp` (`no_telp`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +45,7 @@ CREATE TABLE `admin_users` (
 
 LOCK TABLES `admin_users` WRITE;
 /*!40000 ALTER TABLE `admin_users` DISABLE KEYS */;
-INSERT INTO `admin_users` VALUES (1,'ROIKHAN RIJAL FIRDAUS','ROIKHAN','rijalfirdaus2001@gmail.com','087735036769','$2y$10$jRbPgoKVPT56LHOnc2gZ1u6akChrr86bSc/hBnSu6kSnfpnivspt6','active','2026-06-15 12:48:19'),(2,'Raka Akmal','raka','Snya5088@gmail.com','087865992731','$2y$10$bxiruR7rH.4C1Dfr2m3efe3NUWne36.a9qwjXW7pXRJhXfFTijaP2','active','2026-06-24 00:57:25');
+INSERT INTO `admin_users` VALUES (2,'Raka Akmal','raka','Snya5088@gmail.com','087865992731','admin','$2y$10$bxiruR7rH.4C1Dfr2m3efe3NUWne36.a9qwjXW7pXRJhXfFTijaP2','active','2026-06-24 00:57:25'),(5,'Muhammad Pai Fuda Udah','pai','pai@gmail.com','081382038861','superadmin','$2a$12$3zCF5TpJQtx/UfZBXY9VreZDdczPH8f3OGnhsSPTlAtv4L0tHrLB6','active','2026-06-29 08:46:17');
 /*!40000 ALTER TABLE `admin_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -75,7 +76,7 @@ CREATE TABLE `alat_berat` (
 
 LOCK TABLES `alat_berat` WRITE;
 /*!40000 ALTER TABLE `alat_berat` DISABLE KEYS */;
-INSERT INTO `alat_berat` VALUES (25,'CRANE',NULL,'Forklift terdiri dari beberapa komponen utama seperti sasis, tiang (mast), dan pelindung atas. Alat ini menggunakan garpu (fork) yang dapat dinaikkan atau diturunkan melalui sistem hidraulik untuk memindahkan material.','1777568796_crane.webp','tersedia','Spesifikasi dapat bervariasi tergantung pada model dan merek (seperti Toyota, Mitsubishi, atau CAT). Berikut adalah gambaran spesifikasi umum untuk kelas menengah','Pamulang'),(26,'FORKLIFT',NULL,'Forklift terdiri dari beberapa komponen utama seperti sasis, tiang (mast), dan pelindung atas. Alat ini menggunakan garpu (fork) yang dapat dinaikkan atau diturunkan melalui sistem hidraulik untuk memindahkan material.','1777569295_forklift.webp','tersedia','Spesifikasi dapat bervariasi tergantung pada model dan merek (seperti Toyota, Mitsubishi, atau CAT). Berikut adalah gambaran spesifikasi umum untuk kelas menengah','Pamulang'),(39,'Forklift',NULL,'tes','1780994510_6a27d1ce16969.webp','tersedia','tes','pamulang'),(40,'Forklift',NULL,'tes','1780995286_6a27d4d6ef449.webp','tersedia','tes','Bogor'),(41,'ROIKHAN RIJAL FIRDAUS',NULL,'roi','1782263559_6a3b2f076b414.png','tersedia','roi','Pamulang');
+INSERT INTO `alat_berat` VALUES (25,'CRANE',NULL,'Forklift terdiri dari beberapa komponen utama seperti sasis, tiang (mast), dan pelindung atas. Alat ini menggunakan garpu (fork) yang dapat dinaikkan atau diturunkan melalui sistem hidraulik untuk memindahkan material.','1777568796_crane.webp','tersedia','Spesifikasi dapat bervariasi tergantung pada model dan merek (seperti Toyota, Mitsubishi, atau CAT). Berikut adalah gambaran spesifikasi umum untuk kelas menengah','Pamulang'),(26,'FORKLIFT',NULL,'Forklift terdiri dari beberapa komponen utama seperti sasis, tiang (mast), dan pelindung atas. Alat ini menggunakan garpu (fork) yang dapat dinaikkan atau diturunkan melalui sistem hidraulik untuk memindahkan material.','1777569295_forklift.webp','tersedia','Spesifikasi dapat bervariasi tergantung pada model dan merek (seperti Toyota, Mitsubishi, atau CAT). Berikut adalah gambaran spesifikasi umum untuk kelas menengah','Pamulang'),(39,'Forklift',NULL,'tes','1780994510_6a27d1ce16969.webp','tersedia','tes','pamulang'),(40,'Forklift',NULL,'','1780995286_6a27d4d6ef449.webp','Tidak Tersedia','','Bogor'),(41,'ROIKHAN RIJAL FIRDAUS',NULL,'roi','1782263559_6a3b2f076b414.png','tersedia','roi','Pamulang');
 /*!40000 ALTER TABLE `alat_berat` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -118,4 +119,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-06-25 23:46:51
+-- Dump completed on 2026-06-29 15:54:43
