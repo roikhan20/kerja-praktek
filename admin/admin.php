@@ -415,7 +415,7 @@ $total_tersedia = $res_tersedia['count'];
 
       <?php if ($auth->isSuperadmin()): ?>
         <a href="kelola-admin.php" class="nav-menu-link">
-          👥 <span class="label">Kelola Admin</span>
+          <span class="label">Kelola Admin</span>
         </a>
       <?php endif; ?>
     </div>
@@ -507,7 +507,7 @@ $total_tersedia = $res_tersedia['count'];
           <input type="file" name="gambar" class="form-input" accept="image/*" required>
         </div>
 
-        <button type="submit" name="submit" class="btn-primary">💾 Simpan Alat Baru</button>
+        <button type="submit" name="submit" class="btn-primary">Simpan Alat Baru</button>
       </form>
     </div>
   </div>
@@ -530,7 +530,7 @@ $total_tersedia = $res_tersedia['count'];
               <?php if(!empty($row['gambar']) && file_exists("../uploads/" . $row['gambar'])): ?>
                 <img src="../uploads/<?= htmlspecialchars($row['gambar']); ?>" alt="<?= htmlspecialchars($row['nama']); ?>">
               <?php else: ?>
-                <div class="no-image">📦</div>
+                <div class="no-image"></div>
               <?php endif; ?>
               <span class="status-badge status-<?= htmlspecialchars($row['status']); ?>">
                 <?= $row['status'] == 'tersedia' ? 'Tersedia' : 'Tidak'; ?>
@@ -549,10 +549,10 @@ $total_tersedia = $res_tersedia['count'];
                 <?php endwhile; ?>
               </div>
               <div class="alat-actions">
-                <a href="edit.php?id=<?= $row['id']; ?>" class="btn-edit">✏️ Edit</a>
+                <a href="edit.php?id=<?= $row['id']; ?>" class="btn-edit">Edit</a>
                 <a href="?hapus=<?= $row['id']; ?>"
                    onclick="return confirm('Yakin hapus alat ini?')"
-                   class="btn-delete">🗑️ Hapus</a>
+                   class="btn-delete">Hapus</a>
               </div>
             </div>
           </div>

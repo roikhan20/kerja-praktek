@@ -298,14 +298,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         <button type="submit" class="btn-login">Masuk Admin</button>
       </form>
-      <div class="divider">
-        <span>Akses Menu</span>
-        
-      <div class="auth-links">
-        <a href="register.php" class="auth-link">Daftar Baru</a>
-        </div>
+      
     </div>
   </div>
-
 </body>
 </html>

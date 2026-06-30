@@ -455,7 +455,7 @@ h1,h2,h3,h4 {
                 value="Tersedia"
                 <?= ($row['status'] == 'Tersedia') ? 'checked' : ''; ?>
             >
-            ✅ Tersedia
+            Tersedia
         </label>
 
         <label style="
@@ -473,7 +473,7 @@ h1,h2,h3,h4 {
                 value="Tidak Tersedia"
                 <?= ($row['status'] == 'Tidak Tersedia') ? 'checked' : ''; ?>
             >
-            ❌ Tidak Tersedia
+            Tidak Tersedia
         </label>
     </div>
 </div>

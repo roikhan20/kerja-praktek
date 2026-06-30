@@ -224,8 +224,8 @@ $total_admin = $admins->num_rows;
           <span>PT Cipta Unggul</span>
         </div>
       </a>
-      <a href="admin.php"       class="nav-link">🏗️ Alat Berat</a>
-      <a href="kelola-admin.php" class="nav-link active">👥 Kelola Admin</a>
+      <a href="admin.php"       class="nav-link">Alat Berat</a>
+      <a href="kelola-admin.php" class="nav-link active">Kelola Admin</a>
     </div>
     <div class="nav-right">
       <a href="admin.php?logout=1"
@@ -248,10 +248,10 @@ $total_admin = $admins->num_rows;
   <div class="card">
     <div class="card-header">
       <div>
-        <h2>👥 Daftar Admin</h2>
+        <h2>Daftar Admin</h2>
         <p><?= $total_admin; ?> akun terdaftar</p>
       </div>
-      <a href="tambah-admin.php" class="btn-add">➕ Tambah Admin</a>
+      <a href="tambah-admin.php" class="btn-add">Tambah Admin</a>
     </div>
 
     <div class="table-wrap">
@@ -301,14 +301,14 @@ $total_admin = $admins->num_rows;
             </td>
             <td>
               <div class="actions">
-                <a href="edit-admin.php?id=<?= $row['id']; ?>" class="btn-sm btn-edit-sm">✏️ Edit</a>
-                <a href="edit-admin.php?id=<?= $row['id']; ?>&tab=password" class="btn-sm btn-reset-sm">🔑 Reset</a>
+                <a href="edit-admin.php?id=<?= $row['id']; ?>" class="btn-sm btn-edit-sm">Edit</a>
+                <a href="edit-admin.php?id=<?= $row['id']; ?>&tab=password" class="btn-sm btn-reset-sm">Reset</a>
                 <a href="?hapus=<?= $row['id']; ?>"
                    class="btn-sm btn-del-sm <?= $is_me ? 'btn-disabled' : ''; ?>"
                    <?php if (!$is_me): ?>
                      onclick="return confirm('Hapus admin <?= htmlspecialchars(addslashes($row['nama'])); ?>?')"
                    <?php endif; ?>>
-                   🗑️ Hapus
+                   Hapus
                 </a>
               </div>
             </td>

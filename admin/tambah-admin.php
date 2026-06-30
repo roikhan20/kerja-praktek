@@ -212,8 +212,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </strong>
         <span>PT Cipta Unggul</span>
       </a>
-      <a href="admin.php" class="nav-link">🏗️ Alat Berat</a>
-      <a href="kelola-admin.php" class="nav-link">👥 Kelola Admin</a>
+      <a href="admin.php" class="nav-link">Alat Berat</a>
+      <a href="kelola-admin.php" class="nav-link">Kelola Admin</a>
     </div>
     <div class="nav-right">
       <a href="admin.php?logout=1"
@@ -226,14 +226,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="main-content">
 
   <div class="breadcrumb">
-    <a href="kelola-admin.php">👥 Kelola Admin</a>
+    <a href="kelola-admin.php">Kelola Admin</a>
     <span>›</span>
     <span>Tambah Admin Baru</span>
   </div>
 
   <div class="card">
     <div class="card-header">
-      <h2>➕ Tambah Admin Baru</h2>
+      <h2>Tambah Admin Baru</h2>
       <p>Buat akun admin untuk akses panel</p>
     </div>
     <div class="card-body">
@@ -250,7 +250,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <?php endif; ?>
 
       <div class="role-info">
-        <strong>ℹ️ Informasi Role</strong>
+        <strong>Informasi Role</strong>
         <b>Admin</b> — hanya dapat mengelola data alat berat.<br>
         <b>Superadmin</b> — dapat mengelola data alat berat DAN manajemen akun admin.
       </div>
@@ -312,7 +312,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="btn-actions">
           <a href="kelola-admin.php" class="btn-cancel">Batal</a>
-          <button type="submit" class="btn-primary">💾 Simpan Admin</button>
+          <button type="submit" class="btn-primary">Simpan Admin</button>
         </div>
       </form>
 
